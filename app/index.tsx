@@ -1,15 +1,11 @@
-import { Text, View } from "react-native";
+import LoginForm from '@/components/LoginForm';
+import * as React from 'react';
+import { Provider as PaperProvider } from 'react-native-paper';
 
-export default function Index() {
+export default function App() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Hola mundo.</Text>
-    </View>
+    <PaperProvider>
+      <LoginForm />
+    </PaperProvider>
   );
 }
