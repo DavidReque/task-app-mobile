@@ -1,11 +1,7 @@
-import LoginForm from '@/components/LoginForm';
-import * as React from 'react';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Redirect } from "expo-router";
 
-export default function App() {
-  return (
-    <PaperProvider>
-      <LoginForm />
-    </PaperProvider>
-  );
+const StartPage = () => {
+  return <Redirect href={'/home'} />
 }
+
+export default StartPage

@@ -4,6 +4,7 @@ import { Text, TextInput, Button, Snackbar } from 'react-native-paper';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../app/firebase.config.js';
+import { router } from 'expo-router';
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
@@ -21,6 +22,7 @@ export default function LoginForm() {
       .then((userCredential) => {
         console.log('Usuario autenticado:', userCredential.user);
         // Aquí puedes redirigir al usuario a otra pantalla o mostrar un mensaje de éxito
+        router.push('home')
       })
       .catch((error) => {
         setError(error.message);
