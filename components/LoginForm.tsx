@@ -35,6 +35,7 @@ export default function LoginForm() {
       .then((userCredential) => {
         console.log('Usuario registrado:', userCredential.user);
         // Aquí puedes redirigir al usuario a otra pantalla o mostrar un mensaje de éxito
+        router.push('home')
       })
       .catch((error) => {
         setError(error.message);
