@@ -1,11 +1,11 @@
-import AddTasks from "@/components/AddTasks";
+import EditUser from "@/components/EditUser";
 import { View, Text } from "react-native";
 
 export default function home() {
   return (
     <View>
         <Text>
-          <AddTasks/>
+          <EditUser/>
         </Text>
     </View>
   )
