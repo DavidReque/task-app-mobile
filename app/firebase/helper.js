@@ -26,6 +26,7 @@ export async function addUser(name, email, role) {
   }
 }
 
+//crear tarea
 export async function addTask(title, description, assignedToEmail) {
   try {
     const docRef = await addDoc(collection(db, "tasks"), {
