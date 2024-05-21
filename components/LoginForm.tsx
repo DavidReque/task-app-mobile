@@ -24,7 +24,7 @@ export default function LoginForm() {
       .then((userCredential) => {
         console.log('Usuario autenticado:', userCredential.user);
         // Aquí puedes redirigir al usuario a otra pantalla o mostrar un mensaje de éxito
-        router.push('home')
+        router.push('dashboard')
       })
       .catch((error) => {
         setError(error.message);
@@ -39,10 +39,10 @@ export default function LoginForm() {
       await setDoc(doc(db, 'users', user.uid), {
         name: name,
         email: email,
-        role: 'employee', // O 'admin' dependiendo de tu lógica
+        role: 'employee', 
         assignedTasks: []
       });
-      router.push('home');
+      router.push('dashboard');
     } catch (error: any) {
       setError(error.message);
       setVisible(true);
