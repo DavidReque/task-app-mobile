@@ -5,11 +5,15 @@ import {
   updateDoc,
   doc,
   getDocs,
+  getFirestore,
+  getDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
 const app = initializeApp(firebaseConfig);
+const dbFirestore = getFirestore();
 
 // Añadir un Usuario
 export async function addUser(name, email, role) {
@@ -36,23 +40,30 @@ export async function addTask(title, description, assignedToEmail) {
       status: "pending",
       createdAt: new Date().toISOString(),
     });
-    console.log("Tarea añadida con ID: ", docRef.id);
+    return docRef.id; // Devolver el ID de la tarea
   } catch (e) {
     console.error("Error añadiendo tarea: ", e);
+    throw e;
   }
 }
 
 //Actualizar la Asignación de Tareas para un Usuario
-export async function assignTaskToUser(uid, taskId) {
-  const userRef = doc(db, "users", uid);
-
+export async function assignTaskToUser(email, taskId) {
   try {
-    await updateDoc(userRef, {
-      assignedTasks: arrayUnion(taskId),
-    });
-    console.log("Tarea asignada al usuario");
+    const userSnapshot = await getDocs(collection(db, "users"));
+    const user = userSnapshot.docs.find((doc) => doc.data().email === email);
+    if (user) {
+      const userRef = doc(db, "users", user.id);
+      await updateDoc(userRef, {
+        assignedTasks: arrayUnion(taskId), // Usar arrayUnion para agregar sin sobreescribir
+      });
+      console.log("Tarea asignada al usuario");
+    } else {
+      console.error("Usuario no encontrado");
+    }
   } catch (error) {
-    console.error("Error asignando tarea al usuario: ", e);
+    console.error("Error asignando tarea al usuario: ", error);
+    throw error;
   }
 }
 
@@ -78,6 +89,30 @@ export async function updateUser({ name, email, role }) {
 export const getUsers = async () => {
   const usersCollection = collection(db, "users");
   const userSnapshot = await getDocs(usersCollection);
-  const userList = userSnapshot.docs.map((doc) => doc.data());
+  const userList = userSnapshot.docs.map((doc) => ({
+    ...doc.data(),
+    uid: doc.id, // Incluir el UID del documento
+  }));
+
   return userList;
+};
+
+// Obtener el rol del usuario
+export const getCurrentUserRole = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+    if (userDoc.exists()) {
+      return userDoc.data().role;
+    } else {
+      console.error("No such document!");
+      return null;
+    }
+  } else {
+    console.error("No user is signed in!");
+    return null;
+  }
 };
