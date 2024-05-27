@@ -6,6 +6,7 @@ export default () => {
             <Tabs.Screen name="dashboard"/>
             <Tabs.Screen name="user"/>
             <Tabs.Screen name="create"/>
+            <Tabs.Screen name="mytasks"/>
         </Tabs>
     )
 }

@@ -86,6 +86,22 @@ export async function updateUser({ name, email, role }) {
   }
 }
 
+export async function updateName({ name }) {
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+  if (user) {
+    const userRef = doc(db, "users", user.uid);
+    try {
+      await updateDoc(userRef, {
+        name,
+      });
+      console.log("Usuario actualizado");
+    } catch (e) {
+      console.error("Error actualizando usuario: ", e);
+    }
+  }
+}
+
 export const getUsers = async () => {
   const usersCollection = collection(db, "users");
   const userSnapshot = await getDocs(usersCollection);
@@ -115,4 +131,15 @@ export const getCurrentUserRole = async () => {
     console.error("No user is signed in!");
     return null;
   }
+};
+
+// obtener las tareas
+export const getTasks = async () => {
+  const tasksCollection = collection(db, "tasks");
+  const tasksSnapshot = await getDocs(tasksCollection);
+  const tasksList = tasksSnapshot.docs.map((doc) => ({
+    ...doc.data(),
+    id: doc.id,
+  }));
+  return tasksList;
 };
