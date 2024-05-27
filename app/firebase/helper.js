@@ -8,6 +8,8 @@ import {
   getFirestore,
   getDoc,
   arrayUnion,
+  query,
+  where,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
@@ -142,4 +144,37 @@ export const getTasks = async () => {
     id: doc.id,
   }));
   return tasksList;
+};
+
+// obtener tarea de un usuario
+export const getTasksByUser = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    const tasksCollection = collection(db, "tasks");
+    const q = query(tasksCollection, where("assignedTo", "==", user.email));
+    const taskSnapshot = await getDocs(q);
+    const taskList = taskSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    return taskList;
+  } else {
+    console.error("No user is signed in!");
+    return [];
+  }
+};
+
+export const updateTaskStatus = async (taskId, newStatus) => {
+  try {
+    const taskRef = doc(db, "tasks", taskId);
+    await updateDoc(taskRef, {
+      status: newStatus,
+    });
+    console.log("Estado de la tarea actualizado");
+  } catch (error) {
+    console.error("Error actualizando el estado de la tarea:", error);
+    throw error;
+  }
 };
