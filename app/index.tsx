@@ -1,10 +1,22 @@
-import LoginForm from "@/components/LoginForm";
-import { View, Text } from "react-native";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import LoginForm from '@/components/LoginForm';
 
-const StartPage = () => {
-  return <View>
-  <LoginForm/>
-</View>
-}
+const StartPage: React.FC = () => {
+  return (
+    <View style={styles.container}>
+      <LoginForm />
+    </View>
+  );
+};
 
-export default StartPage
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+});
+
+export default StartPage;

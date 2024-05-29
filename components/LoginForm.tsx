@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text, TextInput, Button, Snackbar } from 'react-native-paper';
+import { 
+  View,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router'; // Asegúrate de estar usando la versión correcta de `expo-router`
 import { firebaseConfig, db } from '../app/firebase/firebase.config';
 import { doc, setDoc } from 'firebase/firestore';
+import { Text, TextInput, Button, Snackbar } from 'react-native-paper';
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
@@ -18,11 +24,12 @@ export default function LoginForm() {
   const [visible, setVisible] = useState(false);
 
   const auth = getAuth(app);
+  const router = useRouter();
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        router.push('dashboard')
+        router.push('dashboard');
       })
       .catch((error) => {
         setError(error.message);
@@ -49,8 +56,8 @@ export default function LoginForm() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.flexContainer}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Iniciar Sesión</Text>
@@ -59,6 +66,7 @@ export default function LoginForm() {
           value={name}
           onChangeText={setName}
           style={styles.input}
+          mode="outlined"
         />
         <TextInput
           label="Correo Electrónico"
@@ -67,6 +75,7 @@ export default function LoginForm() {
           style={styles.input}
           keyboardType="email-address"
           autoCapitalize="none"
+          mode="outlined"
         />
         <TextInput
           label="Contraseña"
@@ -74,6 +83,7 @@ export default function LoginForm() {
           onChangeText={setPassword}
           style={styles.input}
           secureTextEntry
+          mode="outlined"
         />
         <Button mode="contained" onPress={handleLogin} style={styles.button}>
           Iniciar Sesión
@@ -94,11 +104,14 @@ export default function LoginForm() {
 }
 
 const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#fff', // fondo blanco o el color deseado
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
@@ -107,9 +120,11 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 16,
-    backgroundColor: '#fff', // Establecer el fondo blanco para evitar problemas de diseño
+    backgroundColor: '#fff',
+    width: '100%', // Ancho fijo
   },
   button: {
     marginTop: 16,
   },
 });
+

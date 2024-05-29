@@ -1,4 +1,3 @@
-// Dashboard.tsx
 import { getCurrentUserRole, getTasks } from '@/app/firebase/helper';
 import { Task } from '@/types/types';
 import React, { useState, useEffect } from 'react';

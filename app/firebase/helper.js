@@ -166,6 +166,7 @@ export const getTasksByUser = async () => {
   }
 };
 
+// actualizar tarea de un usuario
 export const updateTaskStatus = async (taskId, newStatus) => {
   try {
     const taskRef = doc(db, "tasks", taskId);
