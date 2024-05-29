@@ -97,16 +97,18 @@ export default function AddTasks() {
       <HelperText type="error" visible={description.trim() === ''}>
         La descripción es obligatoria.
       </HelperText>
-      <Picker
-        selectedValue={assignedToEmail}
-        onValueChange={(itemValue) => setAssignedToEmail(itemValue)}
-        style={styles.picker}
-      >
-        <Picker.Item label="Seleccionar usuario" value="" />
-        {users.map((user) => (
-          <Picker.Item key={user.email} label={user.email} value={user.email} />
-        ))}
-      </Picker>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={assignedToEmail}
+          onValueChange={(itemValue) => setAssignedToEmail(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Seleccionar usuario" value="" />
+          {users.map((user) => (
+            <Picker.Item key={user.email} label={user.email} value={user.email} />
+          ))}
+        </Picker>
+      </View>
       <HelperText type="error" visible={assignedToEmail.trim() === ''}>
         Selecciona un usuario.
       </HelperText>
@@ -155,5 +157,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 16,
   },
 });

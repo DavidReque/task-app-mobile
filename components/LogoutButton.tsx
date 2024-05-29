@@ -19,7 +19,7 @@ const LogoutButton = () => {
 
   return (
     <View style={{ marginRight: 16}}>
-      <Button title="Cerrar Sesión" onPress={handleLogout} />
+      <Button title="Cerrar Sesión" onPress={handleLogout} color='red' />
     </View>
   );
 };
