@@ -2,6 +2,9 @@ import { getCurrentUserRole, getTasks } from '@/app/firebase/helper';
 import { Task } from '@/types/types';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { Appbar, Card, Button, ActivityIndicator } from 'react-native-paper';
+import LogoutButton from './LogoutButton';
+
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -26,22 +29,32 @@ export default function Dashboard() {
   }, []);
 
   if (loading) {
-    return <Text>Cargando...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} size="large" />
+        <Text>Cargando...</Text>
+      </View>
+    );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard de Tareas</Text>
+      <Appbar.Header>
+        <Appbar.Content title="Dashboard de Tareas" />
+        <LogoutButton />
+      </Appbar.Header>
       <FlatList
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.taskContainer}>
-            <Text style={styles.taskTitle}>{item.title}</Text>
-            <Text style={styles.taskDescription}>{item.description}</Text>
-            <Text style={styles.taskStatus}>Estado: {item.status}</Text>
-            <Text style={styles.taskDate}>Fecha: {new Date(item.createdAt).toLocaleString()}</Text>
-          </View>
+          <Card style={styles.taskCard}>
+            <Card.Title title={item.title} />
+            <Card.Content>
+              <Text style={styles.taskDescription}>{item.description}</Text>
+              <Text style={styles.taskStatus}>Estado: {item.status}</Text>
+              <Text style={styles.taskDate}>Fecha: {new Date(item.createdAt).toLocaleString()}</Text>
+            </Card.Content>
+          </Card>
         )}
       />
     </View>
@@ -84,5 +97,13 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 12,
     color: '#999',
+  },
+  taskCard: {
+    margin: 10
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

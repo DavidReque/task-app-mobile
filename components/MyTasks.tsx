@@ -1,7 +1,6 @@
-// MyTasks.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { Checkbox } from 'react-native-paper';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { Text, Checkbox, ActivityIndicator } from 'react-native-paper';
 import { getTasksByUser, updateTaskStatus } from '../app/firebase/helper';
 import { Task } from '@/types/types';
 
@@ -33,12 +32,17 @@ export default function MyTasks() {
         )
       );
     } catch (error) {
-      console.error("Error actualizando el estado de la tarea:", error);
+      console.error('Error actualizando el estado de la tarea:', error);
     }
   };
 
   if (loading) {
-    return <Text>Cargando...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} size="large" />
+        <Text>Cargando...</Text>
+      </View>
+    );
   }
 
   return (
@@ -58,7 +62,9 @@ export default function MyTasks() {
                 onPress={() => handleStatusChange(item.id, item.status !== 'pending')}
               />
             </View>
-            <Text style={styles.taskDate}>Fecha: {new Date(item.createdAt).toLocaleString()}</Text>
+            <Text style={styles.taskDate}>
+              Fecha: {new Date(item.createdAt).toLocaleString()}
+            </Text>
           </View>
         )}
       />
@@ -70,6 +76,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#fff',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,

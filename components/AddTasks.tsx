@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import { TextInput, Button, Snackbar, HelperText, ActivityIndicator } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
 
@@ -11,29 +12,35 @@ export default function AddTasks() {
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
 
   const handleAddTask = async () => {
     if (role === 'admin') {
+      if (title.trim() === '' || description.trim() === '' || assignedToEmail.trim() === '') {
+        setMessage('Todos los campos son obligatorios');
+        setVisible(true);
+        return;
+      }
+
       try {
-        // Crear la tarea y obtener el ID de la tarea
         const taskId = await addTask(title, description, assignedToEmail);
-        
-        // Encontrar el usuario asignado por correo electrónico
         const assignedUser = users.find(user => user.email === assignedToEmail);
         
         if (assignedUser) {
-          // Asignar la tarea al usuario
           await assignTaskToUser(assignedUser.email, taskId);
-          setMessage("Tarea asignada correctamente");
+          setMessage('Tarea asignada correctamente');
         } else {
-          setMessage("Usuario no encontrado");
+          setMessage('Usuario no encontrado');
         }
       } catch (error) {
         console.error(error);
-        setMessage("Error asignando la tarea");
+        setMessage('Error asignando la tarea');
+      } finally {
+        setVisible(true);
       }
     } else {
-      setMessage("No tienes permisos para agregar tareas");
+      setMessage('No tienes permisos para agregar tareas');
+      setVisible(true);
     }
   };
 
@@ -55,7 +62,12 @@ export default function AddTasks() {
   }, []);
 
   if (loading) {
-    return <Text>Cargando...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} size="large" />
+        <Text>Cargando...</Text>
+      </View>
+    );
   }
 
   if (role !== 'admin') {
@@ -65,27 +77,49 @@ export default function AddTasks() {
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder="Título"
+        label="Título"
         value={title}
         onChangeText={setTitle}
+        mode="outlined"
         style={styles.input}
       />
+      <HelperText type="error" visible={title.trim() === ''}>
+        El título es obligatorio.
+      </HelperText>
       <TextInput
-        placeholder="Descripción"
+        label="Descripción"
         value={description}
         onChangeText={setDescription}
+        mode="outlined"
         style={styles.input}
+        multiline
       />
+      <HelperText type="error" visible={description.trim() === ''}>
+        La descripción es obligatoria.
+      </HelperText>
       <Picker
         selectedValue={assignedToEmail}
         onValueChange={(itemValue) => setAssignedToEmail(itemValue)}
+        style={styles.picker}
       >
-        <Picker.Item label="Select user" value="" />
+        <Picker.Item label="Seleccionar usuario" value="" />
         {users.map((user) => (
           <Picker.Item key={user.email} label={user.email} value={user.email} />
         ))}
       </Picker>
-      <Button title="Agregar Tarea" onPress={handleAddTask} />
+      <HelperText type="error" visible={assignedToEmail.trim() === ''}>
+        Selecciona un usuario.
+      </HelperText>
+      <Button mode="contained" onPress={handleAddTask} style={styles.button}>
+        Agregar Tarea
+      </Button>
+      <Snackbar
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={Snackbar.DURATION_SHORT}
+      >
+        {message}
+      </Snackbar>
     </View>
   );
 }
@@ -93,19 +127,33 @@ export default function AddTasks() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 16,
+    backgroundColor: '#fff',
   },
   input: {
     marginBottom: 16,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 8,
+  },
+  picker: {
+    marginBottom: 16,
+    backgroundColor: '#fff',
+  },
+  button: {
+    marginTop: 16,
   },
   errorText: {
     color: 'red',
     textAlign: 'center',
     marginTop: 20,
     fontSize: 18,
+  },
+  loadingText: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 18,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

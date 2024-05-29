@@ -1,13 +1,18 @@
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import Dashboard from "@/components/Dashboard";
-import LogoutButton from "@/components/LogoutButton";
-import { View, Button } from "react-native";
 
-export default function dashboard() {
-
+export default function DashboardPage() {
   return (
-    <View>
-      <Dashboard/>
-      <LogoutButton/>
+    <View style={styles.container}>
+      <Dashboard />
     </View>
-  )
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});

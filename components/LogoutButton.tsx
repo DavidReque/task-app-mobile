@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { Button, View } from 'react-native';
 import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 
@@ -18,16 +18,10 @@ const LogoutButton = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ marginRight: 16}}>
       <Button title="Cerrar Sesión" onPress={handleLogout} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    margin: 16,
-  },
-});
 
 export default LogoutButton;

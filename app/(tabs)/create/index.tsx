@@ -1,12 +1,18 @@
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import AddTasks from "@/components/AddTasks";
-import { View, Text } from "react-native";
 
-export default function home() {
+export default function Home() {
   return (
-    <View>
-        <Text>
-          <AddTasks/>
-        </Text>
+    <View style={styles.container}>
+      <AddTasks />
     </View>
-  )
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
