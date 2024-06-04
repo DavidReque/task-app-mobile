@@ -15,3 +15,9 @@ export interface Task {
     assignedTasks: string[];
   }
   
+  export type RootStackParamList = {
+    Login: undefined;
+    Register: undefined;
+    Dashboard: undefined;
+  };
+  
