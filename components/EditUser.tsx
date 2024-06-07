@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Snackbar, Text } from 'react-native-paper';
+import { TextInput, Snackbar, Text } from 'react-native-paper';
 import { updateName } from '../app/firebase/helper';
+import { Button } from 'tamagui';
 
 export default function EditUser() {
   const [name, setName] = useState('');
@@ -35,7 +36,7 @@ export default function EditUser() {
         mode="outlined"
         style={styles.input}
       />
-      <Button mode="contained" onPress={handleUpdateUser} style={styles.button}>
+      <Button backgroundColor={'#E17BF5'} hoverStyle={{backgroundColor: '#E89BF7'}} onPress={handleUpdateUser} style={styles.button}>
         Actualizar Usuario
       </Button>
       <Snackbar

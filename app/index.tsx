@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import LoginForm from '@/components/LoginForm';
 import { TamaguiProvider } from '@tamagui/core';
 import { tamaguiConfig } from '@/temagiConfig';
-import { Button } from 'tamagui';
 
 const StartPage: React.FC = () => {
   return (

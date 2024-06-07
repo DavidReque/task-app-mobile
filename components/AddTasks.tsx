@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { TextInput, Button, Snackbar, HelperText, ActivityIndicator } from 'react-native-paper';
+import { TextInput, Snackbar, HelperText, ActivityIndicator } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
+import { Button } from 'tamagui';
 
 export default function AddTasks() {
   const [title, setTitle] = useState('');
@@ -112,7 +113,7 @@ export default function AddTasks() {
       <HelperText type="error" visible={assignedToEmail.trim() === ''}>
         Selecciona un usuario.
       </HelperText>
-      <Button mode="contained" onPress={handleAddTask} style={styles.button}>
+      <Button backgroundColor={'#E17BF5'} hoverStyle={{backgroundColor: '#E89BF7'}} onPress={handleAddTask} style={styles.button}>
         Agregar Tarea
       </Button>
       <Snackbar

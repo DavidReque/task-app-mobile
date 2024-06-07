@@ -6,7 +6,7 @@ export default function StackLayout() {
       <Stack.Screen 
         name="index"
         options={{
-            headerTitle: 'Agregar tarea'
+            headerShown: false
         }}/>
     </Stack>
   );

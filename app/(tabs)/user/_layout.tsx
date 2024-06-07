@@ -6,7 +6,7 @@ export default function StackLayout() {
       <Stack.Screen 
         name="index"
         options={{
-            headerTitle: 'Editar usuario'
+            headerShown: false
         }}/>
     </Stack>
   );

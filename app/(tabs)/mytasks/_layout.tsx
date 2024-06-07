@@ -6,7 +6,7 @@ export default function StackLayout() {
       <Stack.Screen 
         name="index"
         options={{
-            headerTitle: 'Mis tareas'
+            headerShown: false
         }}/>
     </Stack>
   );

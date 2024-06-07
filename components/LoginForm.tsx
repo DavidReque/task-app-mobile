@@ -60,7 +60,7 @@ export default function LoginForm() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Iniciar Sesión</Text>
+        <Text style={styles.title}>Iniciar Sesión / Registrarse</Text>
         <TextInput
           label="Nombre"
           value={name}
@@ -85,7 +85,7 @@ export default function LoginForm() {
           secureTextEntry
           mode="outlined"
         />
-        <Button variant='outlined' background={'#BA25D6'} color={'white'} onPress={handleLogin} style={styles.button}>
+        <Button variant='outlined' background={'#E17BF5'} color={'white'} onPress={handleLogin} style={styles.button}>
           Iniciar Sesión
         </Button>
         <Button onPress={handleRegister} style={styles.button}>
