@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { 
-  View,
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
@@ -11,7 +10,8 @@ import { initializeApp } from 'firebase/app';
 import { useRouter } from 'expo-router'; // Asegúrate de estar usando la versión correcta de `expo-router`
 import { firebaseConfig, db } from '../app/firebase/firebase.config';
 import { doc, setDoc } from 'firebase/firestore';
-import { Text, TextInput, Button, Snackbar } from 'react-native-paper';
+import { Text, TextInput, Snackbar } from 'react-native-paper';
+import { Button } from 'tamagui';
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
@@ -85,10 +85,10 @@ export default function LoginForm() {
           secureTextEntry
           mode="outlined"
         />
-        <Button mode="contained" onPress={handleLogin} style={styles.button}>
+        <Button variant='outlined' background={'#BA25D6'} color={'white'} onPress={handleLogin} style={styles.button}>
           Iniciar Sesión
         </Button>
-        <Button mode="outlined" onPress={handleRegister} style={styles.button}>
+        <Button onPress={handleRegister} style={styles.button}>
           Registrarse
         </Button>
         <Snackbar
