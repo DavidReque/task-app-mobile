@@ -85,7 +85,7 @@ export default function LoginForm() {
           secureTextEntry
           mode="outlined"
         />
-        <Button variant='outlined' background={'#E17BF5'} color={'white'} onPress={handleLogin} style={styles.button}>
+        <Button variant='outlined' hoverStyle={{backgroundColor: '#E89BF7'}} background={'#E17BF5'} color={'white'} onPress={handleLogin} style={styles.button}>
           Iniciar Sesión
         </Button>
         <Button onPress={handleRegister} style={styles.button}>
