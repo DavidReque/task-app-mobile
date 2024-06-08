@@ -77,6 +77,7 @@ export default function AddTasks() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Agregar tarea</Text>
       <TextInput
         label="Título"
         value={title}
@@ -164,5 +165,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     marginBottom: 16,
+  },title: {
+    fontSize: 24,
+    marginBottom: 24,
+    textAlign: 'center',
   },
 });

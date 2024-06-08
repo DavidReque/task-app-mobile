@@ -40,7 +40,7 @@ export default function Dashboard() {
   return (
     <View style={styles.container}>
       <Appbar.Header>
-        <Appbar.Content title="Dashboard de Tareas" />
+        <Appbar.Content title="Inicio" />
         <LogoutButton />
       </Appbar.Header>
       <FlatList
