@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, View } from 'react-native';
 import { Text, Checkbox, ActivityIndicator } from 'react-native-paper';
 import { getTasksByUser, updateTaskStatus } from '../app/firebase/helper';
 import { Task } from '@/types/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -38,15 +39,15 @@ export default function MyTasks() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator animating={true} size="large" />
         <Text>Cargando...</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Mis Tareas</Text>
       <FlatList
         data={tasks}
@@ -68,7 +69,7 @@ export default function MyTasks() {
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

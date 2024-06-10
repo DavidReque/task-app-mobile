@@ -4,6 +4,7 @@ import { TextInput, Snackbar, HelperText, ActivityIndicator } from 'react-native
 import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
 import { Button } from 'tamagui';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AddTasks() {
   const [title, setTitle] = useState('');
@@ -64,10 +65,10 @@ export default function AddTasks() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator animating={true} size="large" />
         <Text>Cargando...</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -76,7 +77,7 @@ export default function AddTasks() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Agregar tarea</Text>
       <TextInput
         label="Título"
@@ -124,7 +125,7 @@ export default function AddTasks() {
       >
         {message}
       </Snackbar>
-    </View>
+    </SafeAreaView>
   );
 }
 

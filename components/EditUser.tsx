@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { TextInput, Snackbar, Text } from 'react-native-paper';
 import { updateName } from '../app/firebase/helper';
 import { Button } from 'tamagui';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function EditUser() {
   const [name, setName] = useState('');
@@ -27,7 +28,7 @@ export default function EditUser() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Editar Usuario</Text>
       <TextInput
         label="Nombre"
@@ -46,7 +47,7 @@ export default function EditUser() {
       >
         {snackbarMessage}
       </Snackbar>
-    </View>
+    </SafeAreaView>
   );
 }
 
