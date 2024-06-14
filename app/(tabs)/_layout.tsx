@@ -1,18 +1,7 @@
 import { Tabs } from "expo-router"
 import { View, Text } from "react-native"
 import { Entypo, FontAwesome5, Ionicons } from '@expo/vector-icons';
-
-interface TabIconProps {
-    focused: boolean;
-    color: string;
-    size: number;
-  }
-
-interface ScreenOptions {
-    tabBarShowLabel: boolean
-    headerShow: boolean
-    tabBarStyle: object
-}
+import { ScreenOptions } from "@/types/types";
 
 export default () => {
     const screenOptions: ScreenOptions = {
@@ -24,7 +13,7 @@ export default () => {
             right: 0,
             left: 0,
             elevation: 0,
-            height: 60,
+            height: 70,
             background: '#fff'
         }
     }
@@ -55,7 +44,7 @@ export default () => {
                             justifyContent: 'center',
                         }}>
                             <FontAwesome5 name="user-alt" size={22} color="#111" />                            
-                            <Text style={{fontSize: 11, color: "#16247d"}}>USUARIOS</Text>
+                            <Text style={{fontSize: 11, color: "#16247d"}}>USUARIO</Text>
                         </View>
                     )
                 }

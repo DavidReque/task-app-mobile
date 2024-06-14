@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import AddTasks from "@/components/AddTasks";
-//todo (optional): mejorar el select
+// todo: eliminar y editar tareas
+// todo: buscar por nombre
 
 export default function Home() {
   return (
