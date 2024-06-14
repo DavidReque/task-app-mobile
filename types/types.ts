@@ -21,3 +21,19 @@ export interface Task {
     Dashboard: undefined;
   };
   
+  export interface TabIconProps {
+    focused: boolean;
+    color: string;
+    size: number;
+  }
+
+ export interface ScreenOptions {
+    tabBarShowLabel: boolean
+    headerShow: boolean
+    tabBarStyle: object
+}
+
+ export interface UserUidEmail {
+  uid: string;
+  email: string;
+}

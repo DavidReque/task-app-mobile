@@ -110,6 +110,7 @@ export const getUsers = async () => {
   const userList = userSnapshot.docs.map((doc) => ({
     ...doc.data(),
     uid: doc.id, // Incluir el UID del documento
+    email: doc.data().email,
   }));
 
   return userList;
@@ -142,6 +143,11 @@ export const getTasks = async () => {
   const tasksList = tasksSnapshot.docs.map((doc) => ({
     ...doc.data(),
     id: doc.id,
+    title: doc.data().title,
+    description: doc.data().description,
+    status: doc.data().status,
+    assignedTo: doc.data().assignedTo,
+    createdAt: doc.data().createdAt,
   }));
   return tasksList;
 };
@@ -158,6 +164,11 @@ export const getTasksByUser = async () => {
     const taskList = taskSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
+      title: doc.data().title,
+      description: doc.data().description,
+      status: doc.data().status,
+      assignedTo: doc.data().assignedTo,
+      createdAt: doc.data().createdAt,
     }));
     return taskList;
   } else {

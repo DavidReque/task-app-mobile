@@ -5,12 +5,13 @@ import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
 import { Button } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { UserUidEmail } from '@/types/types';
 
 export default function AddTasks() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [assignedToEmail, setAssignedToEmail] = useState('');
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<UserUidEmail[]>([]);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
@@ -49,7 +50,7 @@ export default function AddTasks() {
   useEffect(() => {
     const fetchUsersAndRole = async () => {
       try {
-        const usersList = await getUsers();
+        const usersList: UserUidEmail[] = await getUsers();
         setUsers(usersList);
         const userRole = await getCurrentUserRole();
         setRole(userRole);
