@@ -10,6 +10,7 @@ import {
   arrayUnion,
   query,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
@@ -188,6 +189,30 @@ export const updateTaskStatus = async (taskId, newStatus) => {
     console.log("Estado de la tarea actualizado");
   } catch (error) {
     console.error("Error actualizando el estado de la tarea:", error);
+    throw error;
+  }
+};
+
+// Eliminar tarea
+export const deleteTask = async (taskId) => {
+  try {
+    const taskRef = doc(db, "tasks", taskId);
+    await deleteDoc(taskRef);
+    console.log("Tarea eliminada correctamente");
+  } catch (error) {
+    console.error("Error eliminando la tarea: ", error);
+    throw error;
+  }
+};
+
+// Actualizar tarea
+export const editTask = async (taskId, updateTask) => {
+  try {
+    const taskRef = doc(db, "tasks", taskId);
+    await updateDoc(taskRef, updateTask);
+    console.log("Tarea actualizada correctamente");
+  } catch (error) {
+    console.error("Error actualizando la tarea: ", error);
     throw error;
   }
 };

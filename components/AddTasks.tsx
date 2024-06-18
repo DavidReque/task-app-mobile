@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { TextInput, Snackbar, HelperText, ActivityIndicator } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
@@ -7,6 +7,7 @@ import { Button } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserUidEmail } from '@/types/types';
 import { FlatList } from 'react-native-gesture-handler';
+import TaskList from './TaskList';
 
 export default function AddTasks() {
   const [title, setTitle] = useState('');
@@ -34,7 +35,7 @@ export default function AddTasks() {
         
         if (assignedUser) {
           await assignTaskToUser(assignedUser.email, taskId);
-          setMessage('Tarea asignada correctamente');
+          setMessage('Tarea agregada correctamente');
         } else {
           setMessage('Usuario no encontrado');
         }
@@ -97,89 +98,95 @@ export default function AddTasks() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Agregar tarea</Text>
-      <TextInput
-        label="Título"
-        value={title}
-        onChangeText={setTitle}
-        mode="outlined"
-        style={styles.input}
-      />
-      <HelperText type="error" visible={title.trim() === ''}>
-        El título es obligatorio.
-      </HelperText>
-      <TextInput
-        label="Descripción"
-        value={description}
-        onChangeText={setDescription}
-        mode="outlined"
-        style={styles.input}
-        multiline
-      />
-      <HelperText type="error" visible={description.trim() === ''}>
-        La descripción es obligatoria.
-      </HelperText>
-      <TextInput
-        label="Nombre del usuario"
-        value={assignedToName}
-        onChangeText={setAssignedToName}
-        mode="outlined"
-        style={styles.input}
-      />
-      {filteredUsers.length > 0 && (
-        <FlatList
-          data={filteredUsers}
-          keyExtractor={(item) => item.email}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => {
-              setAssignedToName(item.name);
-              setAssignedToEmail(item.email);
-              setFilteredUsers([]);
-            }}>
-              <Text style={styles.suggestionItem}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-          style={styles.suggestionsContainer}
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.title}>Agregar tarea</Text>
+        <TextInput
+          label="Título"
+          value={title}
+          onChangeText={setTitle}
+          mode="outlined"
+          style={styles.input}
         />
-      )}
-      <HelperText type="error" visible={assignedToName.trim() !== '' && assignedToEmail === ''}>
-        Usuario no encontrado.
-      </HelperText>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={assignedToEmail}
-          onValueChange={(itemValue) => setAssignedToEmail(itemValue)}
-          style={styles.picker}
+        <HelperText type="error" visible={title.trim() === ''}>
+          El título es obligatorio.
+        </HelperText>
+        <TextInput
+          label="Descripción"
+          value={description}
+          onChangeText={setDescription}
+          mode="outlined"
+          style={styles.input}
+          multiline
+        />
+        <HelperText type="error" visible={description.trim() === ''}>
+          La descripción es obligatoria.
+        </HelperText>
+        <TextInput
+          label="Nombre del usuario"
+          value={assignedToName}
+          onChangeText={setAssignedToName}
+          mode="outlined"
+          style={styles.input}
+        />
+        {filteredUsers.length > 0 && (
+          <FlatList
+            data={filteredUsers}
+            keyExtractor={(item) => item.email}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => {
+                setAssignedToName(item.name);
+                setAssignedToEmail(item.email);
+                setFilteredUsers([]);
+              }}>
+                <Text style={styles.suggestionItem}>{item.name}</Text>
+              </TouchableOpacity>
+            )}
+            style={styles.suggestionsContainer}
+          />
+        )}
+        <HelperText type="error" visible={assignedToName.trim() !== '' && assignedToEmail === ''}>
+          Usuario no encontrado.
+        </HelperText>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={assignedToEmail}
+            onValueChange={(itemValue) => setAssignedToEmail(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Seleccionar usuario" value="" />
+            {users.map((user) => (
+              <Picker.Item key={user.email} label={user.email} value={user.email} />
+            ))}
+          </Picker>
+        </View>
+        <HelperText type="error" visible={assignedToEmail.trim() === ''}>
+          Selecciona un usuario.
+        </HelperText>
+        <Button backgroundColor={'#E17BF5'} hoverStyle={{backgroundColor: '#E89BF7'}} onPress={handleAddTask} style={styles.button}>
+          Agregar Tarea
+        </Button>
+        <TaskList/>
+        <Snackbar
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          duration={Snackbar.DURATION_SHORT}
         >
-          <Picker.Item label="Seleccionar usuario" value="" />
-          {users.map((user) => (
-            <Picker.Item key={user.email} label={user.email} value={user.email} />
-          ))}
-        </Picker>
-      </View>
-      <HelperText type="error" visible={assignedToEmail.trim() === ''}>
-        Selecciona un usuario.
-      </HelperText>
-      <Button backgroundColor={'#E17BF5'} hoverStyle={{backgroundColor: '#E89BF7'}} onPress={handleAddTask} style={styles.button}>
-        Agregar Tarea
-      </Button>
-      <Snackbar
-        visible={visible}
-        onDismiss={() => setVisible(false)}
-        duration={Snackbar.DURATION_SHORT}
-      >
-        {message}
-      </Snackbar>
+          {message}
+        </Snackbar>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#fff',
+  },
+  scrollContainer: {
+    padding: 16,
+    paddingBottom: 100, // Espacio para el desplazamiento
   },
   input: {
     marginBottom: 16,
@@ -212,7 +219,8 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     marginBottom: 16,
-  },title: {
+  },
+  title: {
     fontSize: 24,
     marginBottom: 24,
     textAlign: 'center',
