@@ -36,4 +36,5 @@ export interface Task {
  export interface UserUidEmail {
   uid: string;
   email: string;
+  name: string
 }

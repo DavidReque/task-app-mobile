@@ -111,6 +111,7 @@ export const getUsers = async () => {
     ...doc.data(),
     uid: doc.id, // Incluir el UID del documento
     email: doc.data().email,
+    name: doc.data().name,
   }));
 
   return userList;

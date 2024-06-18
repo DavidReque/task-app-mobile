@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { TextInput, Snackbar, HelperText, ActivityIndicator } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
 import { Button } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserUidEmail } from '@/types/types';
+import { FlatList } from 'react-native-gesture-handler';
 
 export default function AddTasks() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [assignedToEmail, setAssignedToEmail] = useState('');
+  const [assignedToName, setAssignedToName] = useState('');
   const [users, setUsers] = useState<UserUidEmail[]>([]);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<UserUidEmail[]>([]);
 
   const handleAddTask = async () => {
     if (role === 'admin') {
@@ -64,6 +67,22 @@ export default function AddTasks() {
     fetchUsersAndRole();
   }, []);
 
+  useEffect(() => {
+    if (assignedToName.trim() !== '') {
+      const user = users.find(u => u.name === assignedToName);
+      if (user) {
+        setAssignedToEmail(user.email);
+      } else {
+        setAssignedToEmail('');
+      }
+
+      // Filtrar usuarios por nombre
+      setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(assignedToName.toLowerCase())));
+    } else {
+      setFilteredUsers([]);
+    }
+  }, [assignedToName, users])
+
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -100,6 +119,32 @@ export default function AddTasks() {
       />
       <HelperText type="error" visible={description.trim() === ''}>
         La descripción es obligatoria.
+      </HelperText>
+      <TextInput
+        label="Nombre del usuario"
+        value={assignedToName}
+        onChangeText={setAssignedToName}
+        mode="outlined"
+        style={styles.input}
+      />
+      {filteredUsers.length > 0 && (
+        <FlatList
+          data={filteredUsers}
+          keyExtractor={(item) => item.email}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => {
+              setAssignedToName(item.name);
+              setAssignedToEmail(item.email);
+              setFilteredUsers([]);
+            }}>
+              <Text style={styles.suggestionItem}>{item.name}</Text>
+            </TouchableOpacity>
+          )}
+          style={styles.suggestionsContainer}
+        />
+      )}
+      <HelperText type="error" visible={assignedToName.trim() !== '' && assignedToEmail === ''}>
+        Usuario no encontrado.
       </HelperText>
       <View style={styles.pickerContainer}>
         <Picker
@@ -171,5 +216,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 24,
     textAlign: 'center',
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  suggestionsContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    maxHeight: 150,
   },
 });
