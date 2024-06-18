@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { TextInput, Snackbar, HelperText, ActivityIndicator } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
 import { Button } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserUidEmail } from '@/types/types';
-import { FlatList } from 'react-native-gesture-handler';
 import TaskList from './TaskList';
+import { FlatList, GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 
 export default function AddTasks() {
   const [title, setTitle] = useState('');
@@ -98,7 +98,8 @@ export default function AddTasks() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <GestureHandlerRootView>
+      <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>Agregar tarea</Text>
         <TextInput
@@ -176,6 +177,7 @@ export default function AddTasks() {
         </Snackbar>
       </ScrollView>
     </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 

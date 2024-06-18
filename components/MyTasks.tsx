@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, FlatList, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text, Checkbox, ActivityIndicator } from 'react-native-paper';
 import { getTasksByUser, updateTaskStatus } from '../app/firebase/helper';
 import { Task } from '@/types/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -47,7 +48,8 @@ export default function MyTasks() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <GestureHandlerRootView>
+      <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Mis Tareas</Text>
       <FlatList
         data={tasks}
@@ -70,6 +72,7 @@ export default function MyTasks() {
         )}
       />
     </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 
@@ -86,7 +89,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
   },

@@ -8,8 +8,8 @@ const StartPage: React.FC = () => {
   return (
     <TamaguiProvider config={tamaguiConfig}>
       <View style={styles.container}>
-      <LoginForm />
-    </View>
+        <LoginForm />
+      </View>
   </TamaguiProvider>
   );
 };
