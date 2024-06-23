@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { RefreshControl, StyleSheet, View } from 'react-native';
 import { Text, Checkbox, ActivityIndicator } from 'react-native-paper';
 import { getTasksByUser, updateTaskStatus } from '../app/firebase/helper';
 import { Task } from '@/types/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { FlatList, GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -38,6 +39,13 @@ export default function MyTasks() {
     }
   };
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -50,7 +58,9 @@ export default function MyTasks() {
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Mis Tareas</Text>
+          <ScrollView contentContainerStyle={styles.scrollContainer}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+          <Text style={styles.title}>Mis Tareas</Text>
       <FlatList
         data={tasks}
         keyExtractor={(item) => item.id}
@@ -71,6 +81,7 @@ export default function MyTasks() {
           </View>
         )}
       />
+          </ScrollView>
     </SafeAreaView>
     </GestureHandlerRootView>
   );
@@ -121,5 +132,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 12,
     color: '#999',
+  },
+  scrollContainer: {
+    flexGrow: 1,
   },
 });

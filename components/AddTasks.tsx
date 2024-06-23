@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, RefreshControl } from 'react-native';
 import { TextInput, Snackbar, HelperText, ActivityIndicator } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { addTask, getUsers, getCurrentUserRole, assignTaskToUser } from '../app/firebase/helper';
@@ -20,6 +20,7 @@ export default function AddTasks() {
   const [message, setMessage] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<UserUidEmail[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleAddTask = async () => {
     if (role === 'admin') {
@@ -51,20 +52,21 @@ export default function AddTasks() {
     }
   };
 
-  useEffect(() => {
-    const fetchUsersAndRole = async () => {
-      try {
-        const usersList: UserUidEmail[] = await getUsers();
-        setUsers(usersList);
-        const userRole = await getCurrentUserRole();
-        setRole(userRole);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUsersAndRole = async () => {
+    setLoading(true);
+    try {
+      const usersList: UserUidEmail[] = await getUsers();
+      setUsers(usersList);
+      const userRole = await getCurrentUserRole();
+      setRole(userRole);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUsersAndRole();
   }, []);
 
@@ -84,6 +86,12 @@ export default function AddTasks() {
     }
   }, [assignedToName, users])
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchUsersAndRole();
+    setRefreshing(false);
+  }, []);
+
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -100,83 +108,86 @@ export default function AddTasks() {
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Agregar tarea</Text>
-        <TextInput
-          label="Título"
-          value={title}
-          onChangeText={setTitle}
-          mode="outlined"
-          style={styles.input}
-        />
-        <HelperText type="error" visible={title.trim() === ''}>
-          El título es obligatorio.
-        </HelperText>
-        <TextInput
-          label="Descripción"
-          value={description}
-          onChangeText={setDescription}
-          mode="outlined"
-          style={styles.input}
-          multiline
-        />
-        <HelperText type="error" visible={description.trim() === ''}>
-          La descripción es obligatoria.
-        </HelperText>
-        <TextInput
-          label="Nombre del usuario"
-          value={assignedToName}
-          onChangeText={setAssignedToName}
-          mode="outlined"
-          style={styles.input}
-        />
-        {filteredUsers.length > 0 && (
-          <FlatList
-            data={filteredUsers}
-            keyExtractor={(item) => item.email}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => {
-                setAssignedToName(item.name);
-                setAssignedToEmail(item.email);
-                setFilteredUsers([]);
-              }}>
-                <Text style={styles.suggestionItem}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-            style={styles.suggestionsContainer}
-          />
-        )}
-        <HelperText type="error" visible={assignedToName.trim() !== '' && assignedToEmail === ''}>
-          Usuario no encontrado.
-        </HelperText>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={assignedToEmail}
-            onValueChange={(itemValue) => setAssignedToEmail(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Seleccionar usuario" value="" />
-            {users.map((user) => (
-              <Picker.Item key={user.email} label={user.email} value={user.email} />
-            ))}
-          </Picker>
-        </View>
-        <HelperText type="error" visible={assignedToEmail.trim() === ''}>
-          Selecciona un usuario.
-        </HelperText>
-        <Button backgroundColor={'#E17BF5'} hoverStyle={{backgroundColor: '#E89BF7'}} onPress={handleAddTask} style={styles.button}>
-          Agregar Tarea
-        </Button>
-        <TaskList/>
-        <Snackbar
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-          duration={Snackbar.DURATION_SHORT}
+        <ScrollView 
+          contentContainerStyle={styles.scrollContainer}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          {message}
-        </Snackbar>
-      </ScrollView>
-    </SafeAreaView>
+          <Text style={styles.title}>Agregar tarea</Text>
+          <TextInput
+            label="Título"
+            value={title}
+            onChangeText={setTitle}
+            mode="outlined"
+            style={styles.input}
+          />
+          <HelperText type="error" visible={title.trim() === ''}>
+            El título es obligatorio.
+          </HelperText>
+          <TextInput
+            label="Descripción"
+            value={description}
+            onChangeText={setDescription}
+            mode="outlined"
+            style={styles.input}
+            multiline
+          />
+          <HelperText type="error" visible={description.trim() === ''}>
+            La descripción es obligatoria.
+          </HelperText>
+          <TextInput
+            label="Nombre del usuario"
+            value={assignedToName}
+            onChangeText={setAssignedToName}
+            mode="outlined"
+            style={styles.input}
+          />
+          {filteredUsers.length > 0 && (
+            <FlatList
+              data={filteredUsers}
+              keyExtractor={(item) => item.email}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => {
+                  setAssignedToName(item.name);
+                  setAssignedToEmail(item.email);
+                  setFilteredUsers([]);
+                }}>
+                  <Text style={styles.suggestionItem}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+              style={styles.suggestionsContainer}
+            />
+          )}
+          <HelperText type="error" visible={assignedToName.trim() !== '' && assignedToEmail === ''}>
+            Usuario no encontrado.
+          </HelperText>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={assignedToEmail}
+              onValueChange={(itemValue) => setAssignedToEmail(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Seleccionar usuario" value="" />
+              {users.map((user) => (
+                <Picker.Item key={user.email} label={user.email} value={user.email} />
+              ))}
+            </Picker>
+          </View>
+          <HelperText type="error" visible={assignedToEmail.trim() === ''}>
+            Selecciona un usuario.
+          </HelperText>
+          <Button backgroundColor={'#E17BF5'} hoverStyle={{backgroundColor: '#E89BF7'}} onPress={handleAddTask} style={styles.button}>
+            Agregar Tarea
+          </Button>
+          <TaskList/>
+          <Snackbar
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            duration={Snackbar.DURATION_SHORT}
+          >
+            {message}
+          </Snackbar>
+        </ScrollView>
+      </SafeAreaView>
     </GestureHandlerRootView>
   );
 }
