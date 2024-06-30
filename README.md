@@ -57,14 +57,14 @@ This command will move the starter code to the **app-example** directory and cre
 
 <img src="./assets/images/user.jpeg" alt="User Screen" width="200"/>
 
- - Agregar Tarea Screen
+ - Add Task Screen
 
  <img src="./assets/images/at.jpeg" alt="Agregar tarea Screen" width="200"/>
 
- - Editar Tarea Screen
+ - Edit Task Screen
 
  <img src="./assets/images/et.jpeg" alt="Editar Tarea Screen" width="200"/>
 
- - Mis Tareas Screen
+ - My Tasks Screen
 
  <img src="./assets/images/check.jpeg" alt="Check Screen" width="200"/>
