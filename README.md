@@ -46,5 +46,20 @@ This command will move the starter code to the **app-example** directory and cre
 
 ## Screenshots
 
-![Login Screen](./assets/images/login.png)
+![Login Screen](./assets/images/login.jpeg)
 *Login Screen*
+
+![Inicio Screen](./assets/images/tasks.jpeg)
+*Home Screen*
+
+![User Screen](./assets/images/user.jpeg)
+*User Screen*
+
+![Agregar Tarea Screen](./assets/images/at.jpeg)
+*Agregar Tarea Screen*
+
+![Editar Screen](./assets/images/et.jpeg)
+*Editar Tarea Screen*
+
+![Mis Tareas Screen](./assets/images/check.jpeg)
+*Mis Tareas Screen*
