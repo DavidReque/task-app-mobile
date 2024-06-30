@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# Welcome to your Task App 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a task management application built with Expo and Firebase, created using create-expo-app. The app allows users to manage their tasks efficiently with an intuitive user interface.
 
 ## Get started
 
@@ -35,16 +35,16 @@ npm run reset-project
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
+## Features
 
-To learn more about developing your project with Expo, look at the following resources:
+ - User authentication with Firebase
+ - Task creation, editing, and deletion
+ - Push notifications for task reminders
+ - Offline functionality with local storage
+ - Responsive design for both Android and iOS
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-## Join the community
+## Screenshots
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+![Login Screen](./assets/images/login.png)
+*Login Screen*
